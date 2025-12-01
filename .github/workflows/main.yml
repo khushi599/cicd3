@@ -2,38 +2,44 @@ on:
   push:
       branches: [ main ]
   workflow_dispatch:
+
 jobs:
- build:
-  runs-on: ubuntu-latest
-  steps:
-        - name: checkout code
-          uses: actions/checkout@v4
-        - name: set up Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version: '18'
-        - name: build dependencies
-          run: npm install
-        - name: build application
-          run: echo "build application..."
- test:
-  runs-on: ubuntu-latest
-  needs: build
-  steps:
-       - name: checkout code
-         uses: actions/checkout@v4
-       - name: install dependencies
-         run: npm install
-       - name: run test
-         run: npm test
- deploy:
-  runs-on: ubuntu-latest
-  needs: test
-  steps:
+  build:
+    runs-on: ubuntu-latest
+    steps:
       - name: checkout code
         uses: actions/checkout@v4
+
+      - name: set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: build dependencies
+        run: npm install
+
+      - name: build application
+        run: echo "build application..."
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: install dependencies
+        run: npm install
+
+      - name: run test
+        run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4   # ← fixed
+
       - name: deploy the application
-        run: echo "deploy the application..."
-  
-    
-   
+        run: echo "deploy the application..."   # ← fixed
